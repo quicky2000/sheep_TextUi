@@ -1,30 +1,43 @@
 #include "sheep_TextUi.h"
 #include "sheep_situation.h"
 
-sheep_TextUi::sheep_TextUi(void):FSM_UI<sheep_situation>()
-{
-}
+using namespace std;
 
-void sheep_TextUi::displaySpecificSituation(const sheep_situation *p_situation)
+namespace sheep_TextUi
 {
-  cout << p_situation->toString() << endl ;
-}
-
-string sheep_TextUi::toString(void)const
-{
-  return "sheep_TextUi";
-}
-
-
-FSM_UI_if* createSheepTextUi(void)
-{
-  return new sheep_TextUi();
-}
-
-extern "C"
-{
-  void registerFsmUi(map<string,FSM_UI_creator> *p_factory)
+  //----------------------------------------------------------------------------
+  sheep_TextUi::sheep_TextUi(void):
+    FSM_UI<sheep::sheep_situation>()
   {
-    registerFsmUi("sheep",createSheepTextUi,p_factory);
   }
+
+  //----------------------------------------------------------------------------
+  void sheep_TextUi::display_specific_situation(const sheep::sheep_situation & p_situation)
+  {
+    std::cout << p_situation.to_string() << std::endl ;
+  }
+
+  //----------------------------------------------------------------------------
+  const std::string & sheep_TextUi::get_class_name(void)const
+  {
+    return m_class_name;
+  }
+
+
+  //----------------------------------------------------------------------------
+  FSM_interfaces::FSM_UI_if & create_sheep_text_ui(void)
+  {
+    return *(new sheep_TextUi());
+  }
+
+  extern "C"
+  {
+    void register_fsm_ui(map<string,FSM_interfaces::FSM_UI_creator_t> & p_factory)
+    {
+      register_fsm_ui("sheep",create_sheep_text_ui,p_factory);
+    }
+  }
+
+  const std::string sheep_TextUi::m_class_name = "sheep_TextUi";
 }
+//EOF

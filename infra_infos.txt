@@ -1,2 +1,3 @@
 depend:sheep
-
+CFLAGS:
+LDFLAGS:
